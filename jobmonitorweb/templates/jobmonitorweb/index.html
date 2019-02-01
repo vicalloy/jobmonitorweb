@@ -1,0 +1,61 @@
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+{% for monitor in qs %}
+<div>
+    <h2>
+        {{ monitor.title }}({{ monitor.pk }})
+        <span id="monitor-status-{{ monitor.pk }}">{{ monitor.get_task_status }}</span>
+        <button monitor-pk="{{ monitor.pk }}" class="monitor-btn" id="monitor-btn-{{ monitor.pk }}" {% if not monitor.can_start %} style="display: none" {% endif %}>
+            刷新
+        </button>
+    </h2>
+    <textarea id="monitor-log-{{ monitor.pk }}" cols="100" rows="20"></textarea><br/>
+</div>
+{% endfor %}
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function updateStatus(monitorPk, status) {
+        $('#monitor-status-' + monitorPk).html(status);
+    }
+
+    var messageSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/jobmonitor/');
+
+    messageSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var monitorPk = data['monitor_pk'];
+        var messageType = data['message_type'];
+        if (messageType == 'task_status') {
+            updateStatus(monitorPk, message);
+            $('#monitor-btn-' + monitorPk).show();
+            return;
+        }
+
+        document.querySelector('#monitor-log-' + monitorPk).value += (message + '\n');
+    };
+
+    messageSocket.onclose = function(e) {
+        console.error('web socket closed unexpectedly');
+    };
+
+    $('button.monitor-btn').click(function(){
+        var t = $(this);
+        var monitorPk = t.attr('monitor-pk');
+        $.post("/api/check_jobs/", {"monitor_pk": monitorPk}, function(data){
+            updateStatus(monitorPk, data.task_status);
+        }, "json");
+        t.hide();
+    });
+</script>
+<script>
+</script>
+</html>

@@ -1,0 +1,18 @@
+[[source]]
+url = "https://mirrors.aliyun.com/pypi/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+channels-redis = "*"
+celery = "*"
+channels = "*"
+redis = "*"
+jsonfield = "*"
+django-lbutils = "*"
+django-celery-results = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
