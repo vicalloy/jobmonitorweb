@@ -1,8 +1,9 @@
-from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from .tasks import check_jobs as celery_check_jobs
+
 from .models import Monitor
+from .tasks import check_jobs as celery_check_jobs
 
 
 def index(request):
@@ -25,4 +26,3 @@ def check_jobs(request):
     return JsonResponse({
         "task_status": 'RUNNING',
     })
-

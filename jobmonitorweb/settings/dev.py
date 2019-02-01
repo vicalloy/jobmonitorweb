@@ -8,5 +8,5 @@ try:
     INSTALLED_APPS += ('debug_toolbar',)  # NOQA
     MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)  # NOQA
     INTERNAL_IPS = ('127.0.0.1',)
-except ImportError as e:
+except ImportError:
     pass

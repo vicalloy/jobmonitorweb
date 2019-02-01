@@ -1,4 +1,4 @@
 try:
     from .local import *  # NOQA
-except ImportError as e:
+except ImportError:
     from .dev import *  # NOQA

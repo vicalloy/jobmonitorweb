@@ -11,4 +11,3 @@ class JobMonitorJsonPlusStorage(JobMonitorJsonStorage):
     def get_file_name(self, data_type):
         fn = "%s-%s.json" % (data_type, self.monitor.pk)
         return os.path.join(self.base_path, fn)
-

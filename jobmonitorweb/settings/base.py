@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+from jobmonitor.message import CLIMessageBackend
+from jobmonitor.message import FileMessageBackend
+from jobmonitor.message import SlackMessageBackend
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(BASE_DIR)
@@ -146,13 +150,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'django-db'
 
-
-
 # message_backend_factory
-
-from jobmonitor.message import CLIMessageBackend
-from jobmonitor.message import FileMessageBackend
-from jobmonitor.message import SlackMessageBackend
 
 
 def message_backend_factory(backend_type, monitor, **kwargs):
@@ -180,5 +178,5 @@ def message_backend_factory(backend_type, monitor, **kwargs):
         return FileMessageBackend(fn=fn)
     return None
 
-JM_MESSAGE_BACKEND_FACTORY = message_backend_factory
 
+JM_MESSAGE_BACKEND_FACTORY = message_backend_factory

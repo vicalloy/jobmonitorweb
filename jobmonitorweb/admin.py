@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import Param
 from .models import Monitor
 from .models import MonitorLog
+from .models import Param
 
 
 class ParamAdmin(admin.ModelAdmin):

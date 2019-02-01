@@ -7,13 +7,13 @@ ci:
 	pipenv run py.test --junitxml=report.xml
 
 isort:
-	isort --recursive jobmonitor tests
+	isort --recursive jobmonitorweb
 
 flake8:
-	pipenv run flake8 jobmonitor tests
+	pipenv run flake8 jobmonitorweb
 
 coverage:
-	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report html --cov=jobmonitor tests
+	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report html --cov=jobmonitorweb
 
 celery:
 	celery worker -A jobmonitorweb -l info
