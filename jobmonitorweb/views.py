@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Monitor
-from .tasks import check_jobs as celery_check_jobs
+from .tasks import celery_check_jobs
 
 
 def index(request):
@@ -19,10 +19,7 @@ def check_jobs(request):
         return JsonResponse({
             "task_status": monitor.get_task_status(),
         })
-
-    task = celery_check_jobs.delay(monitor.pk)
-    monitor.task_id = task.task_id
-    monitor.save()
+    celery_check_jobs.delay(monitor)
     return JsonResponse({
         "task_status": 'RUNNING',
     })

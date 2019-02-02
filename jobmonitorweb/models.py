@@ -1,7 +1,13 @@
+import json
+import pytz
+
 from celery.result import AsyncResult
 from django.conf import settings
 from django.db import models
+from django.db.models import signals
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from jsonfield import JSONField
 from lbutils import create_instance
 
@@ -35,6 +41,7 @@ class Monitor(models.Model):
         limit_choices_to={'code': 'message_backend'},
         related_name='message_backend_monitors',
         verbose_name='Message backends')
+    schedule = JSONField(blank=True)
 
     task_id = models.CharField(_('Task id'), max_length=200, blank=True)
 
@@ -99,3 +106,36 @@ class MonitorLog(models.Model):
 
     class Meta:
         ordering = ('-created_at',)
+
+
+def update_periodic_task(monitor, is_delete=False):
+    task_name = "monitor_%s" % monitor.pk
+    if is_delete:
+        PeriodicTask.objects.filter(name=task_name).delete()
+    if not monitor.schedule:
+        return
+    timezone = pytz.timezone(settings.TIME_ZONE)
+    schedule, _ = CrontabSchedule.objects.get_or_create(
+        timezone=timezone,
+        **monitor.schedule
+    )
+    task = PeriodicTask.objects.filter(name=task_name).first()
+    if not task:
+        task = PeriodicTask(name=task_name)
+    task.enabled = monitor.is_active
+    task.crontab = schedule
+    task.task = 'jobmonitorweb.tasks.celery_check_jobs'
+    task.kwargs = json.dumps({
+        'monitor': monitor.pk,
+    })
+    task.save()
+
+
+@receiver(signals.post_delete, sender=Monitor)
+def update_periodic_task_on_delete(sender, instance, *args, **kwargs):
+    update_periodic_task(instance, is_delete=True)
+
+
+@receiver(signals.post_save, sender=Monitor)
+def update_periodic_task_on_save(sender, instance, *args, **kwargs):
+    update_periodic_task(instance, is_delete=False)

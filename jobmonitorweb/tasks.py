@@ -1,5 +1,6 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from celery.schedules import crontab
 
 from jobmonitorweb import celery_app
 
@@ -24,3 +25,11 @@ def check_jobs(monitor_pk):
             'monitor_pk': monitor.pk
         }
     )
+
+
+def celery_check_jobs(monitor):
+    if not isinstance(monitor, Monitor):
+        monitor = Monitor.objects.filter(pk=monitor).first()
+    task = celery_check_jobs.delay(monitor.pk)
+    monitor.task_id = task.task_id
+    monitor.save()

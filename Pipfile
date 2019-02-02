@@ -14,6 +14,7 @@ django-lbutils = "*"
 django-celery-results = "*"
 lbjobmonitor = "*"
 django-stronghold = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 isort = "*"

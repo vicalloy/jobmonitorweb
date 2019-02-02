@@ -15,8 +15,11 @@ flake8:
 coverage:
 	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report html --cov=jobmonitorweb
 
-celery:
+celery-w:
 	celery worker -A jobmonitorweb -l info
+
+celery-beat:
+	celery -A jobmonitorweb beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
 
 flower:
 	celery flower -A jobmonitorweb --address=127.0.0.1 --port=5555
