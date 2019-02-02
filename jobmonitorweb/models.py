@@ -1,13 +1,14 @@
 import json
-import pytz
 
+import pytz
 from celery.result import AsyncResult
 from django.conf import settings
 from django.db import models
 from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django_celery_beat.models import CrontabSchedule
+from django_celery_beat.models import PeriodicTask
 from jsonfield import JSONField
 from lbutils import create_instance
 
