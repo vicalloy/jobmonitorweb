@@ -1,6 +1,5 @@
 from asgiref.sync import async_to_sync
-
-from jobmonitor.message import IMMessageBackend
+from lbjobmonitor.message import IMMessageBackend
 
 from .models import MonitorLog
 

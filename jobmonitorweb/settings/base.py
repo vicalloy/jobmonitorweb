@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
-from jobmonitor.message import CLIMessageBackend
-from jobmonitor.message import FileMessageBackend
-from jobmonitor.message import SlackMessageBackend
+from lbjobmonitor.message import CLIMessageBackend
+from lbjobmonitor.message import FileMessageBackend
+from lbjobmonitor.message import SlackMessageBackend
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

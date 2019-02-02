@@ -1,6 +1,6 @@
 import os
 
-from jobmonitor.storage import JobMonitorJsonStorage
+from lbjobmonitor.storage import JobMonitorJsonStorage
 
 
 class JobMonitorJsonPlusStorage(JobMonitorJsonStorage):
