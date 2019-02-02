@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'channels',
     'django_celery_results',
+    'stronghold',
 
     'jobmonitorweb',
 ]
@@ -124,6 +125,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/admin/login/'
+
+STRONGHOLD_PUBLIC_URLS = (LOGIN_URL, )
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -160,9 +165,15 @@ def message_backend_factory(backend_type, monitor, **kwargs):
     if backend_type == 'cli':
         return CLIMessageBackend()
     elif backend_type == 'slack':
+        # v2ex don't send job counts
         slack_api_key = ''
         slack_channel = ''
-        return SlackMessageBackend(slack_api_key, slack_channel)
+        show_jobs_count = True
+        return SlackMessageBackend(
+            slack_api_key,
+            slack_channel,
+            show_jobs_count=show_jobs_count
+        )
     elif backend_type == 'ws':
         channel_layer = kwargs.get('channel_layer')
         group_name = kwargs.get('group_name')
