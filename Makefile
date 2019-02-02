@@ -18,6 +18,9 @@ coverage:
 celery:
 	celery worker -A jobmonitorweb -l info
 
+flower:
+	celery flower -A jobmonitorweb --address=127.0.0.1 --port=5555
+
 run:
 	python manage.py runserver
 
