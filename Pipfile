@@ -13,6 +13,7 @@ jsonfield = "*"
 django-lbutils = "*"
 django-celery-results = "*"
 lbjobmonitor = "*"
+django-stronghold = "*"
 
 [dev-packages]
 isort = "*"
