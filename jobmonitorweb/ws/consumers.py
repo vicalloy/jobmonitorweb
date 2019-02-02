@@ -6,6 +6,11 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 class JobMonitorConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.group_name = 'job_monitor_messages'
+        self.user = self.scope["user"]
+
+        if not self.user.is_authenticated:
+            await self.close()
+            return
 
         await self.channel_layer.group_add(
             self.group_name,
