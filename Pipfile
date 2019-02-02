@@ -1,5 +1,6 @@
 [[source]]
-url = "https://mirrors.aliyun.com/pypi/simple"
+#url = "https://mirrors.aliyun.com/pypi/simple"
+url = "https://pypi.org/simple/"
 verify_ssl = true
 name = "pypi"
 
@@ -11,6 +12,7 @@ redis = "*"
 jsonfield = "*"
 django-lbutils = "*"
 django-celery-results = "*"
+lbjobmonitor = "*"
 
 [dev-packages]
 isort = "*"
